@@ -1,0 +1,58 @@
+/**
+ * use-iconfonts http://github.com/rockywu/use-iconfonts
+ * @author rockywu <wjl19890427@hotmail.com>
+ */
+/**
+ * 字体定义
+ */
+@font-face {font-family: "pf-icons";
+  src: url('pf-icons.eot'); /* IE9*/
+  src: url('pf-icons.eot#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('pf-icons.woff2') format('woff2'),/* chrome、firefox, the latest version*/
+  url('pf-icons.woff') format('woff'), /* chrome, firefox */
+  url('pf-icons.ttf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('pf-icons.svg#iconfont') format('svg'); /* iOS 4.1- */
+}
+/*
+ * 1、在支持css3游览器。建议使用，eg: <div class="icon-eb01"></div>
+ * 2、在支持伪类:before,:after游览器下。建议使用，eg:<div class="platform-icons  icon-eb01></div>
+ * 3、低版本游览器模式（如：IE6,IE7,IE8...）。建议使用，eg:<div class="platform-icons ">&#xeb01</div>
+ */
+.platform-icons {
+  font-family:"pf-icons" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+/**
+ * 兼容css3选择器
+ */
+[class*="i-"]:before {
+  font-family:"pf-icons" !important;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+/**
+ * 字体classname
+ */
+.i-ea01:before { content : "\ea01"}
+.i-ea02:before { content : "\ea02"}
+.i-ea03:before { content : "\ea03"}
+.i-ea04:before { content : "\ea04"}
+.i-ea05:before { content : "\ea05"}
+.i-ea06:before { content : "\ea06"}
+.i-ea07:before { content : "\ea07"}
+.i-ea08:before { content : "\ea08"}
+.i-ea09:before { content : "\ea09"}
+.i-ea0a:before { content : "\ea0a"}
+.i-ea0b:before { content : "\ea0b"}
+.i-ea0c:before { content : "\ea0c"}
+.i-ea0d:before { content : "\ea0d"}
+.i-ea0e:before { content : "\ea0e"}
+.i-ea0f:before { content : "\ea0f"}
+.i-ea10:before { content : "\ea10"}
+

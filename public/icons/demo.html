@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>IconFont</title>
+    <link rel="stylesheet" href="demo.css">
+    <link rel="stylesheet" href="iconfont.css">
+  </head>
+
+  <body>
+    <div class="main">
+      <h1>IconFont 图标</h1>
+      <ul class="icon_lists clear">
+        
+        <li>
+          <i class="icon platform-icons ">&#xea01;</i>
+          <div class="name">ea01</div>
+          <div class="code">&amp;#xea01;</div>
+          <div class="fontclass">.i-ea01</div>
+        </li>
+        
+        <li>
+          <i class="icon platform-icons ">&#xea02;</i>
+          <div class="name">ea02</div>
+          <div class="code">&amp;#xea02;</div>
+          <div class="fontclass">.i-ea02</div>
+        </li>
+        
+        <li>
+          <i class="icon platform-icons ">&#xea03;</i>
+          <div class="name">ea03</div>
+          <div class="code">&amp;#xea03;</div>
+          <div class="fontclass">.i-ea03</div>
+        </li>
+        
+        <li>
+          <i class="icon platform-icons ">&#xea04;</i>
+          <div class="name">ea04</div>
+          <div class="code">&amp;#xea04;</div>
+          <div class="fontclass">.i-ea04</div>
+        </li>
+        
+        <li>
+          <i class="icon platform-icons ">&#xea05;</i>
+          <div class="name">ea05</div>
+          <div class="code">&amp;#xea05;</div>
+          <div class="fontclass">.i-ea05</div>
+        </li>
+        
+        <li>
+          <i class="icon platform-icons ">&#xea06;</i>
+          <div class="name">ea06</div>
+          <div class="code">&amp;#xea06;</div>
+          <div class="fontclass">.i-ea06</div>
+        </li>
+        
+        <li>
+          <i class="icon platform-icons ">&#xea07;</i>
+          <div class="name">ea07</div>
+          <div class="code">&amp;#xea07;</div>
+          <div class="fontclass">.i-ea07</div>
+        </li>
+        
+        <li>
+          <i class="icon platform-icons ">&#xea08;</i>
+          <div class="name">ea08</div>
+          <div class="code">&amp;#xea08;</div>
+          <div class="fontclass">.i-ea08</div>
+        </li>
+        
+        <li>
+          <i class="icon platform-icons ">&#xea09;</i>
+          <div class="name">ea09</div>
+          <div class="code">&amp;#xea09;</div>
+          <div class="fontclass">.i-ea09</div>
+        </li>
+        
+        <li>
+          <i class="icon platform-icons ">&#xea0a;</i>
+          <div class="name">ea0a</div>
+          <div class="code">&amp;#xea0a;</div>
+          <div class="fontclass">.i-ea0a</div>
+        </li>
+        
+        <li>
+          <i class="icon platform-icons ">&#xea0b;</i>
+          <div class="name">ea0b</div>
+          <div class="code">&amp;#xea0b;</div>
+          <div class="fontclass">.i-ea0b</div>
+        </li>
+        
+        <li>
+          <i class="icon platform-icons ">&#xea0c;</i>
+          <div class="name">ea0c</div>
+          <div class="code">&amp;#xea0c;</div>
+          <div class="fontclass">.i-ea0c</div>
+        </li>
+        
+        <li>
+          <i class="icon platform-icons ">&#xea0d;</i>
+          <div class="name">ea0d</div>
+          <div class="code">&amp;#xea0d;</div>
+          <div class="fontclass">.i-ea0d</div>
+        </li>
+        
+        <li>
+          <i class="icon platform-icons ">&#xea0e;</i>
+          <div class="name">ea0e</div>
+          <div class="code">&amp;#xea0e;</div>
+          <div class="fontclass">.i-ea0e</div>
+        </li>
+        
+        <li>
+          <i class="icon platform-icons ">&#xea0f;</i>
+          <div class="name">ea0f</div>
+          <div class="code">&amp;#xea0f;</div>
+          <div class="fontclass">.i-ea0f</div>
+        </li>
+        
+        <li>
+          <i class="icon platform-icons ">&#xea10;</i>
+          <div class="name">ea10</div>
+          <div class="code">&amp;#xea10;</div>
+          <div class="fontclass">.i-ea10</div>
+        </li>
+        
+      </ul>
+      <div class="helps">
+        第一步：使用font-face声明字体
+        <pre>
+@font-face {font-family: 'pf-icons';
+  src: url('pf-icons.eot'); /* IE9*/
+  src: url('pf-icons.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('pf-icons.woff2') format('woff2'),/* chrome、firefox, the latest version*/
+  url('pf-icons.woff') format('woff'), /* chrome、firefox */
+  url('pf-icons.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('pf-icons.svg#iconfont') format('svg'); /* iOS 4.1- */
+}</pre>
+        第二步：定义使用iconfont的样式(use iconfont.css)
+        <pre>
+/*
+ * 1、在支持css3游览器。建议使用，eg: &lt;i class="i-eb01"&gt;&lt;/i&gt;
+ * 2、在支持伪类:before,:after游览器下。建议使用，eg:&lt;i class="platform-icons  i-eb01"&gt;&lt;/i&gt;
+ * 3、低版本游览器模式（如：IE6,IE7,IE8...）。建议使用，eg:&lt;i class="platform-icons "&gt;&amp;#xeb01&lt;/i&gt;
+ */
+/* 兼容所有版本写法 */
+.platform-icons {
+    font-family:"pf-icons" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}
+[class*="i-"]:before {
+    font-family:"pf-icons" !important;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}
+</pre>
+        第三步：挑选相应图标并获取字体编码，应用于页面
+        <pre>//支持css3
+&lt;i class="i-eb01"&gt;&lt;/i&gt;
+</pre>
+        <pre>//支持IE9+
+&lt;i class="platform-icons i-eb01"&gt;&lt;/i&gt;
+</pre>
+        <pre>//支持IE6,7,8+
+&lt;i class="platform-icons"&gt;&amp;#xeb01&lt;/i&gt;
+</pre>
+        </div>
+      </div>
+  </body>
+</html>
