@@ -37,3 +37,6 @@
 .inner_row_project i {
     font-size: 24px;
 }
+.small-box-footer_project .platform-icons_middle {
+    margin-top: -4px;
+}

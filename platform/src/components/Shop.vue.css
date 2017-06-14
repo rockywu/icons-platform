@@ -1,0 +1,39 @@
+.block-shop {
+    display: block;
+    height:168px;
+}
+.box-shop {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    border-top-color: #ecf0f5;
+    margin-bottom:0;
+    height: 220px;
+}
+.box-shop .box-header {
+    border-bottom: 1px solid #ecf0f5;
+    padding: 15px 30px;
+}
+.box-shop .box-header>.box-tools {
+    top: 10px;
+    right: 30px;
+}
+
+.box-shop .box-body {
+    height:100%;
+    background-color: #f4f4f4;
+    padding: 15px 45px 45px;
+    overflow-y: auto;
+}
+
+/**
+ * 工具栏
+ */
+.shop-tool {
+    margin-left: 20px;
+}
+.shop-tool i{
+    font-size: 12px;
+    margin-right: 5px;
+}
