@@ -6,7 +6,7 @@ var appPath = "../../public/";
 module.exports = {
   build: {
     env: require('./prod.env'),
-    index: path.resolve(__dirname, appPath + 'index.html'),
+    index: path.resolve(__dirname, appPath + 'production.html'),
     assetsRoot: path.resolve(__dirname, appPath),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
