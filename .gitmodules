@@ -1,0 +1,3 @@
+[submodule "58cas"]
+	path = 58cas
+	url = http://gitlab.58corp.com/bujiangfeng/58node-cas.git
