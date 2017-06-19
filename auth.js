@@ -9,13 +9,6 @@ var cas = new Cas58({
 });
 
 module.exports = function (app) {
-    // 登陆 中间件
-    app.use(function(req, res, next) {
-        cas.authenticate(req, res, function(err, status, username, extended) {
-            next();
-        });
-    })
-
     // 退出
     app.use(function(req, res, next) {
         cas.handleSingleSignout(req, res, function(status, result) {
@@ -29,11 +22,18 @@ module.exports = function (app) {
                     break;
                 case "noquit":
                     console.log("noquit");
-                    next();
+                next();
                     break;
             }
         });
     });
 
+    // 登陆 中间件
+    app.use(function(req, res, next) {
+        cas.authenticate(req, res, function(err, status, username, extended) {
+            console.log(666, username, extended, status);
+            next();
+        });
+    })
 }
 
