@@ -23,11 +23,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 auth(app);
 app.use('/', index);
-//app.use(require('connect-history-api-fallback')())
+app.use(require('connect-history-api-fallback')())
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  var err = new Error('Page Not Found');
   err.status = 404;
   next(err);
 });

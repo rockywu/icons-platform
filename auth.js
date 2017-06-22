@@ -9,7 +9,7 @@ var cas = new Cas58({
 });
 
 module.exports = function (app) {
-    // 退出
+    //退出
     app.use(function(req, res, next) {
         cas.handleSingleSignout(req, res, function(status, result) {
             switch (status) {
@@ -31,8 +31,14 @@ module.exports = function (app) {
     // 登陆 中间件
     app.use(function(req, res, next) {
         cas.authenticate(req, res, function(err, status, username, extended) {
-            console.log(666, username, extended, status);
-            next();
+            if(err) {
+                var err = new Error('Not Found');
+                err.status = 404;
+                next(err);
+            } else {
+                console.log(666, username, extended, status);
+                next();
+            }
         });
     })
 }
