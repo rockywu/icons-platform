@@ -1,12 +1,29 @@
 /**
  * Created by rocky on 2017/6/18.
  */
+import {mapValues} from "lodash";
 var Cas58 = require("58node-cas/cas58")
 // cas配置项实例化
 var cas = new Cas58({
     testFlag: false, // 是否是在测试true为是
     service: 'http://iconfonts.corp.anjuke.com'
 });
+
+/**
+ * 格式化58userinfo
+ * @param extend
+ */
+function formatUserInfo(extend) {
+    var attrs = extend.attributes;
+
+    return {
+        username: extend.username,
+        ...mapValues(attrs, (v) => {
+            return Buffer.from(v[0], "base64").toString()
+        })
+    };
+}
+
 
 module.exports = function (app) {
     //退出
@@ -36,7 +53,8 @@ module.exports = function (app) {
                 err.status = 404;
                 next(err);
             } else {
-                console.log(666, username, extended, status);
+                res.locals.userInfo = formatUserInfo(extended);
+                res.locals.replaceTicket = true;
                 next();
             }
         });

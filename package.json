@@ -3,10 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start" : "node ./node_modules/nodemon/bin/nodemon.js ./bin/www --exec ./node_modules/babel-cli/bin/babel-node.js --presets es2015,stage-2",
+    "server" : "node ./node_modules/babel-cli/bin/babel-node.js ./bin/www --presets es2015,stage-2"
   },
   "dependencies": {
     "58node-cas": "git+http://gitlab.58corp.com/bujiangfeng/58node-cas.git",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "body-parser": "~1.17.1",
     "cheerio": "^1.0.0-rc.1",
     "connect-history-api-fallback": "^1.3.0",
@@ -18,5 +21,9 @@
     "morgan": "~1.8.1",
     "serve-favicon": "~2.4.2",
     "use-iconfonts": "^1.9.12"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "nodemon": "^1.11.0"
   }
 }

@@ -33,6 +33,31 @@
 <script type=text/javascript src=/relies/AdminLTE/js/app.min.js></script>
 <script type=text/javascript src=/relies/dropzone.min.js></script>
 <script type=text/javascript src=/relies/plugins/select2/select2.min.js></script>
-
 <script type=text/javascript src=/static/js/manifest.js></script><script type=text/javascript src=/static/js/vendor.js></script><script type=text/javascript src=/static/js/app.js></script></body>
+<script type=text/javascript>
+    /**
+     * 清理58ticket导致的认证失效
+     * @param url
+     * @return {string}
+     */
+    function getNoTicketUrl(url) {
+        return ("" + url).replace(/(\?|&)(ticket=[^&]+)(&?)/, function () {
+            var $1 = RegExp.$1;
+            var $2 = RegExp.$2;
+            var $3 = RegExp.$3;
+            if($1 == "?" ) {
+                if($3 == "&") {
+                    return $1;
+                } else {
+                    return "";
+                }
+            } else {
+               return $3;
+            }
+        });
+    }
+    <% if(replaceTicket) {%>
+        window.history.replaceState({}, document.title, getNoTicketUrl(window.location.href));
+    <% }%>
+</script>
 </html>
