@@ -38,7 +38,7 @@ export default {
     data() {
         return {
             tabs : tabs,
-            shopVisible : true
+            shopVisible : false
         }
     },
     components : {

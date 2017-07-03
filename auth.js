@@ -1,5 +1,6 @@
 /**
  * Created by rocky on 2017/6/18.
+ * 58权限接入
  */
 import {mapValues} from "lodash";
 var Cas58 = require("58node-cas/cas58")
