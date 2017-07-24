@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.6.20)
 # Database: icons
-# Generation Time: 2017-07-24 09:36:10 +0000
+# Generation Time: 2017-07-24 09:40:48 +0000
 # ************************************************************
 
 
@@ -127,15 +127,13 @@ CREATE TABLE `relations` (
 DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (
-  `u_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `user_id` char(10) NOT NULL DEFAULT '' COMMENT '用户公司id',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_id` varchar(20) NOT NULL DEFAULT '' COMMENT '用户公司id',
   `user_name` varchar(50) NOT NULL DEFAULT '' COMMENT '中文名',
-  `user_code` varchar(10) NOT NULL COMMENT '用户企业编号',
   `user_email` varchar(50) NOT NULL COMMENT '用户邮箱',
   `english_name` varchar(50) NOT NULL DEFAULT '' COMMENT '英文名',
   `permissions` varchar(256) NOT NULL DEFAULT '' COMMENT '用户权限用“|”分隔',
-  `group` int(11) NOT NULL COMMENT '组编号',
-  PRIMARY KEY (`u_id`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
