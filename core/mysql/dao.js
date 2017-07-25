@@ -34,7 +34,7 @@ function dao(tableName, primaryKey, client) {
  * dao初始化表结构
  */
 dao.prototype.initialize = function() {
-    var _this = this;
+    let _this = this;
     this.client.query("SELECT * FROM " + this.tb + " limit 0", [], function(err, rows, fields) {
         forEach(fields, function(filed) {
             if(filed.name) {
@@ -49,10 +49,10 @@ dao.prototype.initialize = function() {
  * buildWhere
  */
 dao.prototype.buildWhere = function(where) {
-    var _this = this;
-    var sql = "";
-    var values = [];
-    var params = [];
+    let _this = this;
+    let sql = "";
+    let values = [];
+    let params = [];
     if(typeof where == 'string' && where != "") {
         values.push(where);
     } else if(typeof where == "object") {
@@ -67,7 +67,7 @@ dao.prototype.buildWhere = function(where) {
                     return;
                 }
                 if(isArray(val)) {
-                    var p = [];
+                    let p = [];
                     _.forEach(val, function(v){
                         p.push("?");
                         params.push(v);
@@ -97,10 +97,10 @@ dao.prototype.buildWhere = function(where) {
  * buildFields
  */
 dao.prototype.buildFields = function(fields) {
-    var _this = this;
-    var fieldStr = "";
+    let _this = this;
+    let fieldStr = "";
     if(isArray(fields)) {
-        var tmp = [];
+        let tmp = [];
         forEach(fields, function(field) {
             if(_this.fields[field]) {
                 tmp.push("`" + field + "`");
@@ -144,8 +144,8 @@ dao.prototype.find = function(where, order, limit, offset, fields) {
     order = isString(order) ? order : "";
     limit = limit > 0 ? parseInt(limit, 10) : '';
     offset = parseInt(offset, 10) || "";
-    var buildWhere = this.buildWhere(where);
-    var sql = "SELECT";
+    let buildWhere = this.buildWhere(where);
+    let sql = "SELECT";
     sql += " " + this.buildFields(fields);
     sql += " FROM " + this.tb;
     sql += " " + buildWhere.sql;
@@ -170,12 +170,12 @@ dao.prototype.find = function(where, order, limit, offset, fields) {
  * @type {dao}
  */
 dao.prototype.insert = function(data) {
-    var _this = this;
-    var keys = [];
-    var hasKeys = false;
-    var values = [];
-    var tmpValues;
-    var params = [];
+    let _this = this;
+    let keys = [];
+    let hasKeys = false;
+    let values = [];
+    let tmpValues;
+    let params = [];
     if(!isArray(data)) {
         data = [data];
     }
@@ -192,7 +192,7 @@ dao.prototype.insert = function(data) {
         values.push("(" + tmpValues.join(",")+ ")")
         hasKeys = true;
     });
-    var sql = "INSERT INTO " + this.tb + " (";
+    let sql = "INSERT INTO " + this.tb + " (";
     sql += " " + keys.join(",");
     sql += " ) VALUES " + values.join(",");
     values = null;
@@ -209,10 +209,10 @@ dao.prototype.insert = function(data) {
  * @type {dao}
  */
 dao.prototype.update = function(data, where) {
-    var _this = this;
-    var sets = [];
-    var params = [];
-    var sql = "UPDATE";
+    let _this = this;
+    let sets = [];
+    let params = [];
+    let sql = "UPDATE";
     sql += " " + this.tb;
     _.forEach(data, function(val, key) {
         if(_this.pk == key || !_this.fields[key]) { return; }
@@ -220,7 +220,7 @@ dao.prototype.update = function(data, where) {
         params.push(val);
     })
     sql += " SET " + sets.join(",");
-    var buildWhere = this.buildWhere(where);
+    let buildWhere = this.buildWhere(where);
     sql += " " + buildWhere.sql;
     _.forEach(buildWhere.params, function (val) {
         params.push(val);
@@ -237,9 +237,9 @@ dao.prototype.update = function(data, where) {
  * @return {void|SQLResultSet}
  */
 dao.prototype.delete = function(where) {
-    var sql = "DELETE FROM";
+    let sql = "DELETE FROM";
     sql += " " + this.tb;
-    var buildWhere = this.buildWhere(where);
+    let buildWhere = this.buildWhere(where);
     sql += buildWhere.sql;
     let cb = getCallback(arguments);
     this.execute(sql, buildWhere.params, (err, rs) => {
@@ -269,7 +269,7 @@ function getSqlType(sql) {
  * 格式化sql数据
  */
 function formatSqlData(type, data) {
-    var result = null;
+    let result = null;
     switch(type) {
         case 'INSERT':
             result = !isNull(data) ? data.insertId : 0;
@@ -295,7 +295,7 @@ function formatSqlData(type, data) {
 dao.prototype.execute = function(sql, params) {
     logger.info("query : " + sql, "params : " , params);
     let cb = getCallback(arguments);
-    var type = getSqlType(sql);
+    let type = getSqlType(sql);
     console.log(sql, params.join(","));
     this.client.query(sql, params, (err, rows, fields) => {
         let rs = formatSqlData(type, rows);

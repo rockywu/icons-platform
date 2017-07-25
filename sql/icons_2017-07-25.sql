@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.6.20)
 # Database: icons
-# Generation Time: 2017-07-24 09:40:48 +0000
+# Generation Time: 2017-07-25 09:38:33 +0000
 # ************************************************************
 
 
@@ -52,7 +52,6 @@ CREATE TABLE `icons` (
   `svg` text NOT NULL COMMENT '图标svg',
   `hash` char(32) NOT NULL DEFAULT '' COMMENT '图标hash',
   `name` varchar(50) NOT NULL DEFAULT '' COMMENT '图标昵称',
-  `type` int(11) NOT NULL DEFAULT '0' COMMENT '0为系统添加，1为历史添加',
   PRIMARY KEY (`id`),
   UNIQUE KEY `hash` (`hash`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -121,12 +120,12 @@ CREATE TABLE `relations` (
 
 
 
-# Dump of table user
+# Dump of table users
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `users`;
 
-CREATE TABLE `user` (
+CREATE TABLE `users` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `user_id` varchar(20) NOT NULL DEFAULT '' COMMENT '用户公司id',
   `user_name` varchar(50) NOT NULL DEFAULT '' COMMENT '中文名',

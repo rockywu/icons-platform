@@ -40,7 +40,7 @@ export default {
     beforeCreate() {
     },
     mounted() {
-        dropzone("#dropzone-svg", {url : ""});
+        dropzone("#dropzone-svg", {url : "./"});
     }
 }
 
