@@ -4,7 +4,7 @@
  * Created by rocky on 16/7/9.
  */
 let {forEach, isFunction, isString, isArray, isNull} = require("lodash");
-let logger = require("log4js").getLogger("core/mysql/dao");
+let logger = require("../index").getLogger("core/mysql/dao");
 
 function getCallback(args) {
     args = [].slice.call(args);
