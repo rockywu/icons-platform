@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var ajax = require('./routes/ajax');
-var auth = require('./auth');
+//var auth = require('./auth');
 
 var app = express();
 
@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-auth(app);
+//auth(app);
 app.use('/ajax', ajax)
 app.use('/', index);
 app.use(require('connect-history-api-fallback')())

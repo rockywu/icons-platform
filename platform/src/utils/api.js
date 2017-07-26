@@ -2,7 +2,9 @@
 /**
  * Created by rocky on 2017/7/3.
  */
-import {isString, isObject, forEach} from "lodash";
+import {isString, isObject, forEach, extend, isFunction} from "lodash";
+import config  from "./apiConfigure";
+let $ = window.jQuery;
 let baseUrl = "iconfonts.corp.anjuke.com";
 /**
  * 组装Url
@@ -33,12 +35,42 @@ function buildUrl(url, querys) {
  * 封装ajax请求
  * @param options
  */
-function fetch(options = {}) {
-
+function fetch(options = {}, cb = () => {}) {
+    if(isFunction(cb)) {
+        $.ajax({
+            url : options.url || "",
+            data : options.params || {},
+            dataType : options.dataType || "json",
+            success : (rs) => {
+                cb(null, rs);
+            },
+            error : (e) => {
+                cb(e);
+            }
+        });
+    }
 }
 
+/**
+ * 获取fetch函数
+ * @param apiName
+ */
 function getFetch(apiName) {
-
+    let api = null;
+    if(config && apiName && config[apiName]) {
+        return (options, cb) => {
+            fetch(extend({}, config[apiName], options), cb);
+        }
+    } else {
+        throw new Error(`该api：${apiName}不存在`);
+    }
 }
+
+export default getFetch;
+
+
+
+
+
 
 

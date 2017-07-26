@@ -15,6 +15,8 @@
 </template>
 
 <script>
+
+import Api from "@/utils/api"
 let $ = window.jQuery;
 /**
  * 拖拽上传控件
@@ -40,7 +42,7 @@ export default {
     beforeCreate() {
     },
     mounted() {
-        dropzone("#dropzone-svg", {url : "./"});
+        dropzone("#dropzone-svg", {url : "http://iconfonts.corp.anjuke.com/ajax/svg/upload"});
     }
 }
 
