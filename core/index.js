@@ -3,6 +3,7 @@
  * Created by rocky on 2017/7/25.
  */
 const {isFunction} = require("lodash");
+let path = require("path");
 let log4js = require("log4js");
 log4js.configure({
     appenders: {
@@ -41,7 +42,28 @@ function getLogger(name) {
     return log4js.getLogger(name || "core/index");
 }
 
+/**
+ * 获取当前项目路径
+ */
+function buildPath(filePath) {
+    filePath = filePath || "";
+    filePath = __dirname + "/../" + filePath;
+    return path.normalize(filePath.replace("//", "/"));
+}
+
+/**
+ * 获取缓存路径
+ */
+function buildCachePath(path) {
+    path = path || "";
+    return buildPath("/.cache/" + path);
+}
+
+
+
 module.exports = {
     getCallback,
-    getLogger
+    getLogger,
+    buildPath,
+    buildCachePath
 }
