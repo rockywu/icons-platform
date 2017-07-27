@@ -5,7 +5,7 @@
  */
 var fs = require("fs");
 var fontBunder = require("use-iconfonts").fontBunder;
-var iconPath = __dirname + "/platform-ions/";
+var iconPath = __dirname + "/platform-icons/";
 var fb = new fontBunder();
 var mkdirp = require("mkdirp");
 var path = require("path");
