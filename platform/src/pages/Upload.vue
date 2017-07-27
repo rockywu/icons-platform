@@ -10,6 +10,9 @@
     </form>
     <input type="file" multiple="multiple" class="dz-hidden-input" />
     </section>
+    <section class="" id="">
+
+    </section>
 </div>
 
 </template>

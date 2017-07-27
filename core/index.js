@@ -2,9 +2,10 @@
 /**
  * Created by rocky on 2017/7/25.
  */
-const {isFunction} = require("lodash");
+const {isFunction, isObject} = require("lodash");
 let path = require("path");
 let log4js = require("log4js");
+let fs = require("fs");
 log4js.configure({
     appenders: {
         out : {
@@ -16,6 +17,7 @@ log4js.configure({
         default: { appenders: ['out'], level: 'trace' },
     },
 });
+let logger = getLogger("core/index");
 
 /**
  * 获取回调函数
@@ -59,11 +61,29 @@ function buildCachePath(path) {
     return buildPath("/.cache/" + path);
 }
 
+/**
+ * 删除目标文件
+ */
+function deleteFile(filePath = "", cb = () => {}) {
+    if(!filePath) {
+        logger.warn("func.deleteFile", "文件不能为空")
+    }
+    try {
+        fs.unlink(filePath,(err) => {
+            if(err) {
+                logger.error("func.deleteFile", "文件删除出错", filePath);
+            }
+            cb(err);
+        });
+    } catch(e) {}
+}
+
 
 
 module.exports = {
     getCallback,
     getLogger,
     buildPath,
-    buildCachePath
+    buildCachePath,
+    deleteFile,
 }
