@@ -1,0 +1,18 @@
+.main-nav {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 15px;
+    background-color: #fff;
+}
+.main-nav .el-tabs__header {
+    border: 0;
+    margin: 0;
+}
+.main-nav .el-tabs__nav-wrap {
+}
+.main-nav .el-tabs__item.is-active {
+    background-color: #f9fcff;
+}
