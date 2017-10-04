@@ -4,19 +4,10 @@
  */
 const {isFunction, isObject} = require("lodash");
 let path = require("path");
-let log4js = require("log4js");
 let fs = require("fs");
-log4js.configure({
-    appenders: {
-        out : {
-            type: 'file',
-            filename: '../logs/system.log',
-        }
-    },
-    categories: {
-        default: { appenders: ['out'], level: 'trace' },
-    },
-});
+let log4js = require("log4js");
+let logConfigure =require("../config/logs");
+log4js.configure(logConfigure);
 let logger = getLogger("core/index");
 
 /**
