@@ -9,6 +9,7 @@ let log4js = require("log4js");
 let logConfigure =require("../config/logs");
 log4js.configure(logConfigure);
 let logger = getLogger("core/index");
+let cryptoJsMd5 = require("crypto-js/md5");
 
 /**
  * 获取回调函数
@@ -69,7 +70,17 @@ function deleteFile(filePath = "", cb = () => {}) {
     } catch(e) {}
 }
 
-
+/**
+ * 内容MD5
+ * @param content
+ * @return {*}
+ */
+function md5(content) {
+    if(typeof content != "string") {
+        content = content.toString();
+    }
+    return cryptoJsMd5(content).toString();
+}
 
 module.exports = {
     getCallback,
@@ -77,4 +88,5 @@ module.exports = {
     buildPath,
     buildCachePath,
     deleteFile,
+    md5
 }

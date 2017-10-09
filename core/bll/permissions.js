@@ -4,7 +4,14 @@
  */
 const {permissions} = require("../tables");
 const {testAsyncFunc} = require("node-mysql-dao");
-const {EXCEPTION_ARGUMENTS} = require("../constants");
+const {
+    EXCEPTION_ARGUMENTS,
+    PERMISSION_GATHER_UPLOAD,
+    PERMISSION_GATHER_MODIFY,
+    PERMISSION_GATHER_AUDIT,
+    PERMISSION_GATHER_PUBLISH,
+    PERMISSION_GATHER_ADMIN
+} = require("../constants");
 const {forEach} = require("lodash");
 
 /**
@@ -26,8 +33,6 @@ function getGatherPermissionsByGid(gid, cb) {
     });
 }
 
-testAsyncFunc("getGatherPermissionsByGid", getGatherPermissionsByGid, 1);
-
 /**
  * 获取用户集合权限
  * @param uid
@@ -45,8 +50,6 @@ function getUserPermissionsByUid(uid, cb) {
         tmp = null;
     });
 }
-testAsyncFunc("getUserPermissionsByUid", getUserPermissionsByUid, 1);
-
 
 /**
  * 添加用户集合权限
@@ -65,4 +68,55 @@ function addUserPermission(gid, uid, aid, cb = () => {}) {
 function deleteUserPermission(gid, uid, aid, cb = ()=> {}) {
     if(!gid || !uid || !aid) return cb(EXCEPTION_ARGUMENTS);
     permissions.delete({gid, uid, aid}, cb);
+}
+
+/**
+ *
+ */
+function checkUserForHasPermissionByAid(gid, uid, aid, cb = ()=> {}) {
+
+}
+
+
+/**
+ * 检查用户是否有集合上传权限
+ */
+function checkUserForHasUploadPermission(gid, uid, cb = () => {}) {
+    checkUserForHasPermissionByAid(gid, uid , PERMISSION_GATHER_UPLOAD, cb);
+}
+
+/**
+ * 检查用户是否有集合编辑权限
+ */
+function checkUserForHasModifyPermission(gid, uid, cb = () => {}) {
+    checkUserForHasPermissionByAid(gid, uid , PERMISSION_GATHER_MODIFY, cb);
+}
+
+/**
+ * 检查用户是否有集合审核权限
+ */
+function checkUserForHasAuditPermission(gid, uid, cb = () => {}) {
+    checkUserForHasPermissionByAid(gid, uid , PERMISSION_GATHER_AUDIT, cb);
+}
+
+/**
+ * 检查用户是否有集合发布权限
+ */
+function checkUserForHasPublishPermission(gid, uid, cb = () => {}) {
+    checkUserForHasPermissionByAid(gid, uid , PERMISSION_GATHER_PUBLISH, cb);
+}
+
+/**
+ * 检查用户是否有集合管理员权限
+ */
+function checkUserForHasAdminPermission() {
+    checkUserForHasPermissionByAid(gid, uid , PERMISSION_GATHER_ADMIN, cb);
+}
+
+
+module.exports = {
+    getGatherPermissionsByGid,
+    getUserPermissionsByUid,
+    addUserPermission,
+    deleteUserPermission
 }

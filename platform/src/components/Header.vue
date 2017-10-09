@@ -1,6 +1,6 @@
 <template>
     <header class="main-header clearfix">
-        <div class="header-iconic">I<span>con</span>F<span>onts</span></div>
+        <div class="header-iconic">I<span>cons</span></div>
         <div class="header-nav clearfix">
             <el-input class="header-input" v-model="input" placeholder="请输入内容" icon="search">
             </el-input>

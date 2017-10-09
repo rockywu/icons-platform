@@ -3,6 +3,11 @@
  * Created by rocky on 2017/7/27.
  */
 const {isObject} = require("lodash");
+const {series, apply} = require("async");
+const {COOKIE_USER_INFO} = require("../core/constants");
+const {parseSecretUserInfo, createSecretUserInfo} = require("../core/secret");
+const {getUserPermissionsByUid} = require("../core/bll/permissions");
+const {getUserInfoByUid} =  require("../core/bll/users");
 /**
  * 输出json返回值
  * @param object res //response对象
@@ -36,16 +41,34 @@ module.exports = (req, res, next) => {
         res.status(200).json(rs).end();
     }
     /**
-     * 设置用户信息,模拟信息
+     * 获取已登录用户基本信息
      */
-    res.locals.userInfo = {
-        userId : 1,
-        sign : "00001",
-        name : "吴佳雷",
-        avatar : "http://home.corp.anjuke.com/headpic/SHF3959/big.jpg",
-        email : "rockywu_ajk@58ganji.com",
-        english_name : "rockywu",
-        permissions : "1,2,3,4,5,6"
+    res.locals.userInfo = null;
+    res.locals.userPermissions = null;
+    let userAgent = req.headers['user-agent'];
+    let userInfo = parseSecretUserInfo(userAgent, req.cookies[COOKIE_USER_INFO]);
+    if(!userInfo || !userInfo.uid) {
+        //未登录用户操作，可以查看所有公开
+        let secretUserInfo = createSecretUserInfo(userAgent, {uid : 1, uname : 'rockywu'});
+        res.cookie(COOKIE_USER_INFO, secretUserInfo, {
+            maxAge : 1000 * 60 * 60 * 6
+        });
+        res.send("前往登录并成功登陆").end();
     }
-    next();
+    let uid = userInfo.uid;
+    /**
+     * 访问获取用户所有信息
+     */
+    series({
+        userInfo : apply(getUserInfoByUid, uid),
+        userPermissions : apply(getUserPermissionsByUid, uid)
+    }, function(err, rs) {
+        if(err) {
+            return next(404);
+        }
+        res.locals.userInfo = rs.userInfo;
+        res.locals.userPermissions = rs.userPermissions;
+        res.send(JSON.stringify(res.locals.userInfo)).end();
+        return next();
+    })
 }

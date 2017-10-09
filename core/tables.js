@@ -12,13 +12,13 @@ function log() {
 let cl = getClient(database.master, log);
 //返回数据表操作对象,用于增删改查
 module.exports = {
-    authorities : getDaoByClient(cl, "authorities", "id", log),
-    basics : getDaoByClient(cl, "basics", "id", log),
+    authorities : getDaoByClient(cl, "authorities", "aid", log),
+    basics : getDaoByClient(cl, "basics", "bid", log),
     contents : getDaoByClient(cl, "contents", "id", log),
-    gathers : getDaoByClient(cl, "gathers", "id", log),
+    gathers : getDaoByClient(cl, "gathers", "gid", log),
     logs : getDaoByClient(cl, "logs", "id", log),
     permissions :getDaoByClient(cl, "permissions", "id", log),
     relations : getDaoByClient(cl, "relations", "id", log),
     subscribers : getDaoByClient(cl, "subscribers", "id", log),
-    users : getDaoByClient(cl, "users", "id", log)
+    users : getDaoByClient(cl, "users", "uid", log)
 }
