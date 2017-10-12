@@ -11,6 +11,12 @@ const PERMISSION_GATHER_PUBLISH = 4; //集合发布操作
 const PERMISSION_GATHER_ADMIN = 5; //集合权限管理
 const COOKIE_USER_INFO = "auth_user_info"; //用户cookiename
 const EXCEPTION_NONE_RESULT = "EXCEPTION_NONE_RESULT";//空结果
+const AJAX_STATUS = {
+   STATUS_SUCCESS : 200, //访问成功
+   STATUS_FAILED : 201, //操作失败
+   STATUS_REJECT : 203, //访问被拒绝
+   STATUS_NOTFOUND: 404, //未找到
+}
 
 module.exports = {
    EXCEPTION_NONE_RESULT,
@@ -20,5 +26,6 @@ module.exports = {
    PERMISSION_GATHER_AUDIT,
    PERMISSION_GATHER_PUBLISH,
    PERMISSION_GATHER_ADMIN,
-   COOKIE_USER_INFO
+   COOKIE_USER_INFO,
+   AJAX_STATUS
 }

@@ -2,12 +2,13 @@
 /**
  * Created by rocky on 2017/7/27.
  */
-const {isObject} = require("lodash");
+const {isObject, forEach, extend} = require("lodash");
 const {series, apply} = require("async");
 const {COOKIE_USER_INFO} = require("../core/constants");
 const {parseSecretUserInfo, createSecretUserInfo} = require("../core/secret");
 const {getUserPermissionsByUid} = require("../core/bll/permissions");
 const {getUserInfoByUid} =  require("../core/bll/users");
+const {AJAX_STATUS} = require("../core/constants");
 /**
  * 输出json返回值
  * @param object res //response对象
@@ -15,9 +16,9 @@ const {getUserInfoByUid} =  require("../core/bll/users");
  * @param string status 1为操作成功，其他均为错误
  * @param string message
  */
-function outJson(data = null, message = "成功", status = "0") {
+function outJson(data = null, message = "成功", status = 200) {
     return {
-        status : status ? (status + "").toString() : (isObject(data) ? "1" : "0"),
+        status : status ? (status + "").toString() : (isObject(data) ? "200" : "0"),
         message : (message + "").toString(),
         data : isObject(data) ? data : {}
     };
@@ -30,6 +31,20 @@ function outJson(data = null, message = "成功", status = "0") {
  * @param next
  */
 module.exports = (req, res, next) => {
+
+    /**
+     * 获取参数
+     */
+    res.getParams = (paramNames = []) => {
+        let query = req.query;
+        let body = req.body;
+        let params = req.params;
+        let tmp = {};
+        forEach(paramNames, (v) => {
+            tmp[v] = params[v] || body[v] || query[v] || null;
+        });
+        return tmp;
+    }
     /**
      * 添加json标准输出
      * @param data
@@ -53,7 +68,7 @@ module.exports = (req, res, next) => {
         res.cookie(COOKIE_USER_INFO, secretUserInfo, {
             maxAge : 1000 * 60 * 60 * 6
         });
-        res.send("前往登录并成功登陆").end();
+        return next();
     }
     let uid = userInfo.uid;
     /**
@@ -64,11 +79,11 @@ module.exports = (req, res, next) => {
         userPermissions : apply(getUserPermissionsByUid, uid)
     }, function(err, rs) {
         if(err) {
-            return next(404);
+            //操作错误
+            return next();
         }
         res.locals.userInfo = rs.userInfo;
         res.locals.userPermissions = rs.userPermissions;
-        res.send(JSON.stringify(res.locals.userInfo)).end();
         return next();
     })
 }

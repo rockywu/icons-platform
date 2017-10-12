@@ -71,46 +71,46 @@ function deleteUserPermission(gid, uid, aid, cb = ()=> {}) {
 }
 
 /**
- *
+ * 检查用户集合权限
  */
-function checkUserForHasPermissionByAid(gid, uid, aid, cb = ()=> {}) {
-
+function checkUserForHasPermissionByAid(permissions = [], aid = 0) {
+    permissions = permissions || [];
+    return permissions && permissions.indexOf(aid) >=0;
 }
-
 
 /**
  * 检查用户是否有集合上传权限
  */
-function checkUserForHasUploadPermission(gid, uid, cb = () => {}) {
-    checkUserForHasPermissionByAid(gid, uid , PERMISSION_GATHER_UPLOAD, cb);
+function checkUserForHasUploadPermission(permissions) {
+    return checkUserForHasPermissionByAid(permissions , PERMISSION_GATHER_UPLOAD);
 }
 
 /**
  * 检查用户是否有集合编辑权限
  */
-function checkUserForHasModifyPermission(gid, uid, cb = () => {}) {
-    checkUserForHasPermissionByAid(gid, uid , PERMISSION_GATHER_MODIFY, cb);
+function checkUserForHasModifyPermission(permissions) {
+    return checkUserForHasPermissionByAid(permissions , PERMISSION_GATHER_MODIFY);
 }
 
 /**
  * 检查用户是否有集合审核权限
  */
-function checkUserForHasAuditPermission(gid, uid, cb = () => {}) {
-    checkUserForHasPermissionByAid(gid, uid , PERMISSION_GATHER_AUDIT, cb);
+function checkUserForHasAuditPermission(permissions) {
+    return checkUserForHasPermissionByAid(permissions , PERMISSION_GATHER_AUDIT);
 }
 
 /**
  * 检查用户是否有集合发布权限
  */
-function checkUserForHasPublishPermission(gid, uid, cb = () => {}) {
-    checkUserForHasPermissionByAid(gid, uid , PERMISSION_GATHER_PUBLISH, cb);
+function checkUserForHasPublishPermission(permissions) {
+    return checkUserForHasPermissionByAid(permissions , PERMISSION_GATHER_PUBLISH);
 }
 
 /**
  * 检查用户是否有集合管理员权限
  */
-function checkUserForHasAdminPermission() {
-    checkUserForHasPermissionByAid(gid, uid , PERMISSION_GATHER_ADMIN, cb);
+function checkUserForHasAdminPermission(permissions) {
+    return checkUserForHasPermissionByAid(permissions , PERMISSION_GATHER_ADMIN);
 }
 
 
@@ -118,5 +118,10 @@ module.exports = {
     getGatherPermissionsByGid,
     getUserPermissionsByUid,
     addUserPermission,
-    deleteUserPermission
+    deleteUserPermission,
+    checkUserForHasUploadPermission,
+    checkUserForHasModifyPermission,
+    checkUserForHasAuditPermission,
+    checkUserForHasPublishPermission,
+    checkUserForHasAdminPermission
 }

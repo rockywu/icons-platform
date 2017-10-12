@@ -23,14 +23,27 @@ function getUserInfoByUid(uid, cb = () => {}) {
     users.findRow({uid}, (err, rs) => {
         if(err) return cb(err);
         if(rs === null) return cb(EXCEPTION_NONE_RESULT);
-        console.log(8888, rs)
         cb(null, Object.assign({}, rs));
         rs = null;
     });
 }
 
+/**
+ * 获取多个用户的基本信息
+ * @type {{getUserInfoByUid: getUserInfoByUid}}
+ */
+function getUserInfoByUids(uids = [], cb = () => {}) {
+    users.find({uid : uids}, (err, rs) => {
+        if(err) return cb(err);
+        if(rs.length < 1) return cb(EXCEPTION_NONE_RESULT);
+        cb(null, rs);
+        rs = null;
+    });
+}
+
 module.exports = {
-    getUserInfoByUid
+    getUserInfoByUid,
+    getUserInfoByUids
 }
 
 //testAsyncFunc("getUserInfoById", getUserInfoById, 1);
