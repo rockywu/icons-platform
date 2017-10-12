@@ -19,7 +19,7 @@ const {forEach} = require("lodash");
  * @param gid
  * @param cb
  */
-function getGatherPermissionsByGid(gid, cb) {
+function getGatherPermissionsByGid(gid, cb = () => {}) {
     if(!gid) return cb(EXCEPTION_ARGUMENTS);
     permissions.find({gid}, (err, rs) => {
         if(err) return cb(err);
@@ -34,10 +34,11 @@ function getGatherPermissionsByGid(gid, cb) {
 }
 
 /**
- * 获取用户集合权限
+ * 获取用户所有集合的权限
  * @param uid
+ * @param cb
  */
-function getUserPermissionsByUid(uid, cb) {
+function getUserPermissionsByUid(uid, cb = () => {}) {
     if(!uid) return cb(EXCEPTION_ARGUMENTS);
     permissions.find({uid}, (err, rs) => {
         if(err) return cb(err);
@@ -54,8 +55,8 @@ function getUserPermissionsByUid(uid, cb) {
 /**
  * 添加用户集合权限
  * @param gid 集合id
- * @param uid 用户id
- * @param aid 权限id
+ * @param uid 被操作用户id
+ * @param aid 被分配权限id
  */
 function addUserPermission(gid, uid, aid, cb = () => {}) {
     if(!gid || !uid || !aid) return cb(EXCEPTION_ARGUMENTS);
@@ -64,6 +65,9 @@ function addUserPermission(gid, uid, aid, cb = () => {}) {
 
 /**
  * 删除用户集合权限
+ * @param gid 集合id
+ * @param uid 被操作用户id
+ * @param aid 被分配权限id
  */
 function deleteUserPermission(gid, uid, aid, cb = ()=> {}) {
     if(!gid || !uid || !aid) return cb(EXCEPTION_ARGUMENTS);
@@ -72,6 +76,8 @@ function deleteUserPermission(gid, uid, aid, cb = ()=> {}) {
 
 /**
  * 检查用户集合权限
+ * @param permissions 用户集合权限
+ * @return boolean
  */
 function checkUserForHasPermissionByAid(permissions = [], aid = 0) {
     permissions = permissions || [];
@@ -80,6 +86,8 @@ function checkUserForHasPermissionByAid(permissions = [], aid = 0) {
 
 /**
  * 检查用户是否有集合上传权限
+ * @param permissions 用户集合权限
+ * @return boolean
  */
 function checkUserForHasUploadPermission(permissions) {
     return checkUserForHasPermissionByAid(permissions , PERMISSION_GATHER_UPLOAD);
@@ -87,6 +95,8 @@ function checkUserForHasUploadPermission(permissions) {
 
 /**
  * 检查用户是否有集合编辑权限
+ * @param permissions 用户集合权限
+ * @return boolean
  */
 function checkUserForHasModifyPermission(permissions) {
     return checkUserForHasPermissionByAid(permissions , PERMISSION_GATHER_MODIFY);
@@ -94,6 +104,8 @@ function checkUserForHasModifyPermission(permissions) {
 
 /**
  * 检查用户是否有集合审核权限
+ * @param permissions 用户集合权限
+ * @return boolean
  */
 function checkUserForHasAuditPermission(permissions) {
     return checkUserForHasPermissionByAid(permissions , PERMISSION_GATHER_AUDIT);
@@ -101,6 +113,8 @@ function checkUserForHasAuditPermission(permissions) {
 
 /**
  * 检查用户是否有集合发布权限
+ * @param permissions 用户集合权限
+ * @return boolean
  */
 function checkUserForHasPublishPermission(permissions) {
     return checkUserForHasPermissionByAid(permissions , PERMISSION_GATHER_PUBLISH);
@@ -108,9 +122,20 @@ function checkUserForHasPublishPermission(permissions) {
 
 /**
  * 检查用户是否有集合管理员权限
+ * @param permissions 用户集合权限
+ * @return boolean
  */
 function checkUserForHasAdminPermission(permissions) {
     return checkUserForHasPermissionByAid(permissions , PERMISSION_GATHER_ADMIN);
+}
+
+/**
+ * 检查用户是否是系统管理员
+ * @param userInfo 用户信息
+ * @return boolean
+ */
+function checkUserForHasSystemAdminPermission(userInfo = {}) {
+    return parseInt(userInfo.authority, 10) === 1;
 }
 
 
@@ -123,5 +148,6 @@ module.exports = {
     checkUserForHasModifyPermission,
     checkUserForHasAuditPermission,
     checkUserForHasPublishPermission,
-    checkUserForHasAdminPermission
+    checkUserForHasAdminPermission,
+    checkUserForHasSystemAdminPermission
 }

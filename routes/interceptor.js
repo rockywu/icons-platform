@@ -35,12 +35,12 @@ module.exports = (req, res, next) => {
     /**
      * 获取参数
      */
-    res.getParams = (paramNames = []) => {
+    res.getParams = (...args) =>{
         let query = req.query;
         let body = req.body;
         let params = req.params;
         let tmp = {};
-        forEach(paramNames, (v) => {
+        forEach(args, (v) => {
             tmp[v] = params[v] || body[v] || query[v] || null;
         });
         return tmp;

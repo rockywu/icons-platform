@@ -4,7 +4,7 @@
  */
 const express = require('express');
 const router = express.Router();
-const {waterfall,apply} = require("async");
+const {auto, apply} = require("async");
 const {
     AJAX_STATUS,
     PERMISSION_GATHER_UPLOAD,
@@ -20,6 +20,10 @@ const {
 } = require("../../core/bll/permissions");
 
 const {
+    getGatherInfoByGid
+} = require("../../core/bll/gathers");
+
+const {
     getUserInfoByUid
 } = require("../../core/bll/users");
 
@@ -31,7 +35,7 @@ const {
  * 平台超级用户添加/删除集合管理员权限
  */
 router.use("/user/admin", (req, res, next) => {
-    let params = res.getParams(["gid", "action", "uid"]);
+    let params = res.getParams("gid", "action", "uid");
     let userInfo = res.locals.userInfo;
     if(parseInt(userInfo.authority, 10) === 1) {
         return next();
@@ -45,7 +49,7 @@ router.use("/user/admin", (req, res, next) => {
  */
 router.use(/\/user\/(upload|modify|audit|publish)/, (req, res, next) => {
     let locals = res.locals;
-    let params = res.getParams(["gid", "action", "uid"]);
+    let params = res.getParams("gid", "action", "uid");
     let action = params.action;
     let gid = params.gid;
     let uid = params.uid;
@@ -64,7 +68,7 @@ router.use(/\/user\/(upload|modify|audit|publish)/, (req, res, next) => {
  */
 router.use(/\/user\/(upload|modify|audit|publish|admin)/, (req, res) => {
     let locals = res.locals;
-    let params = res.getParams(["gid", "action", "uid", "0"]);
+    let params = res.getParams("gid", "action", "uid", "0");
     let type = params["0"];
     let types = {
         "upload" : PERMISSION_GATHER_UPLOAD,
@@ -73,29 +77,28 @@ router.use(/\/user\/(upload|modify|audit|publish|admin)/, (req, res) => {
         "publish" : PERMISSION_GATHER_PUBLISH,
         "admin" : PERMISSION_GATHER_ADMIN
     }
-    let cb = null;
-    if(params.action == "add") {
-        cb = apply(addUserPermission, params.gid, params.uid, types[type]);
-    } else {
-        cb = apply(deleteUserPermission, params.gid, params.uid, types[type]);
-    }
-    waterfall([(cb) => {
-        getUserInfoByUid(params.uid, (err, rs) => {
-            if(err) {
-                return cb({msg :"该用户不存在"});
+    auto({
+        gatherInfo : apply(getGatherInfoByGid, params.gid),
+        userInfo : apply(getUserInfoByUid, params.uid),
+        operateInfo : ["gatherInfo", "userInfo", function(rs, cb) {
+            let callback = null;
+            if(params.action == "add") {
+                callback = apply(addUserPermission, params.gid, params.uid, types[type]);
+            } else {
+                callback = apply(deleteUserPermission, params.gid, params.uid, types[type]);
             }
-            return cb(null);
-        });
-    }, cb], (err, rs) => {
-        if(err || rs < 1) {
-            return res.outJson({}, err.msg || "操作失败", AJAX_STATUS.STATUS_FAILED);
+            callback(cb);
+        }]
+    }, (err, rs) => {
+        if(err || !rs.gatherInfo || !rs.userInfo || !rs.operateInfo) {
+            return res.outJson({}, "操作失败", AJAX_STATUS.STATUS_FAILED);
         }
         operatePermissionLog(locals.userInfo.uid, {
             gid : params.gid,
             uid : params.uid,
             action : params.action
         });
-        res.outJson(rs);
+        return res.outJson({});
     });
 });
 
