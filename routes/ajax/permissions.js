@@ -27,24 +27,23 @@ const {
     operatePermissionLog
 } = require("../../core/bll/logs");
 
-
 /*
- * 权限校验
+ * 平台超级用户添加/删除集合管理员权限
  */
-router.use("*", (req, res, next) => {
-    let params = res.getParams(["gid"]);
-    let gid = params.gid;
-    let permissions = res.locals.userPermissions;
-    if(!gid || !permissions || !permissions[gid]) {
+router.use("/user/admin", (req, res, next) => {
+    let params = res.getParams(["gid", "action", "uid"]);
+    let userInfo = res.locals.userInfo;
+    if(parseInt(userInfo.authority, 10) === 1) {
+        return next();
+    } else {
         return res.outJson({}, "无权限访问", AJAX_STATUS.STATUS_REJECT);
     }
-    next();
 });
 
 /**
- * 权限用户操作
+ * 集合管理员权限用户操作
  */
-router.use("/user/*", (req, res, next) => {
+router.use(/\/user\/(upload|modify|audit|publish)/, (req, res, next) => {
     let locals = res.locals;
     let params = res.getParams(["gid", "action", "uid"]);
     let action = params.action;
@@ -56,31 +55,40 @@ router.use("/user/*", (req, res, next) => {
         || !uid) {
         return res.outJson({}, "无权限访问", AJAX_STATUS.STATUS_REJECT);
     }
-    //校验用户是否存在
-    getUserInfoByUid(uid, (err, rs) => {
-        if(err) {
-            return res.outJson({}, "该用户不存在", AJAX_STATUS.STATUS_REJECT);
-        }
-        return next();
-    });
+    next();
 });
 
 
 /**
- * 添加/移除集合用户上传权限
+ * 添加/移除集合用户的权限
  */
-router.get("/user/upload", (req, res, next) => {
+router.use(/\/user\/(upload|modify|audit|publish|admin)/, (req, res) => {
     let locals = res.locals;
-    let params = res.getParams(["gid", "action", "uid"]);
+    let params = res.getParams(["gid", "action", "uid", "0"]);
+    let type = params["0"];
+    let types = {
+        "upload" : PERMISSION_GATHER_UPLOAD,
+        "modify" : PERMISSION_GATHER_MODIFY,
+        "audit" : PERMISSION_GATHER_AUDIT,
+        "publish" : PERMISSION_GATHER_PUBLISH,
+        "admin" : PERMISSION_GATHER_ADMIN
+    }
     let cb = null;
     if(params.action == "add") {
-        cb = apply(addUserPermission, params.gid, params.uid, PERMISSION_GATHER_UPLOAD);
+        cb = apply(addUserPermission, params.gid, params.uid, types[type]);
     } else {
-        cb = apply(deleteUserPermission, params.gid, params.uid, PERMISSION_GATHER_UPLOAD);
+        cb = apply(deleteUserPermission, params.gid, params.uid, types[type]);
     }
-    waterfall([cb], (err, rs) => {
-        if(err) {
-            return res.outJson({}, "操作失败", AJAX_STATUS.STATUS_FAILED);
+    waterfall([(cb) => {
+        getUserInfoByUid(params.uid, (err, rs) => {
+            if(err) {
+                return cb({msg :"该用户不存在"});
+            }
+            return cb(null);
+        });
+    }, cb], (err, rs) => {
+        if(err || rs < 1) {
+            return res.outJson({}, err.msg || "操作失败", AJAX_STATUS.STATUS_FAILED);
         }
         operatePermissionLog(locals.userInfo.uid, {
             gid : params.gid,
@@ -90,9 +98,5 @@ router.get("/user/upload", (req, res, next) => {
         res.outJson(rs);
     });
 });
-
-/**
- * 添加集合
- */
 
 module.exports = router;
