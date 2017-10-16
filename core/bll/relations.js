@@ -28,7 +28,11 @@ function updateReloations(relationsInfo = {}, where = {}, cb = () => {}) {
  * @param gid 集合id
  */
 function restoreGatherOfRemovedReloations(gid = 0, cb = () => {}) {
-    updateReloations({ flag : 1 }, {gid, flag : 3 }, cb);
+    updateReloations({ flag : 1 }, {gid, flag : 3 }, (err ,rs) => {
+        if(err == EXCEPTION_UNABLE_OPERATE) return cb(null, 0);
+        if(err) return cb(err);
+        cb(null ,rs);
+    });
 }
 
 /**

@@ -9,14 +9,16 @@ const {
     EXCEPTION_NONE_RESULT,
     EXCEPTION_UNABLE_OPERATE
 } = require("../constants");
-const {waterfall, apply} = require("async");
-const {forEach} = require("lodash");
+const {auto,series, apply} = require("async");
+const {forEach, isEmpty} = require("lodash");
+const {restoreGatherOfRemovedReloations} = require("./relations");
 
 /**
  * 获取有效的集合信息
  * @param gid
  */
 function getValidityGatherInfoByGid(gid, cb = ()=> {}) {
+    if(!gid || gid < 1) return cb(EXCEPTION_ARGUMENTS);
     gathers.findRow({gid, flag : 0}, (err, rs) => {
         if(err || rs === null) return cb(err || EXCEPTION_NONE_RESULT);
         cb(null, Object.assign({}, rs));
@@ -29,6 +31,7 @@ function getValidityGatherInfoByGid(gid, cb = ()=> {}) {
  * @param gid
  */
 function getInvalidityGatherInfoByGid(gid, cb = ()=> {}) {
+    if(!gid || gid < 1) return cb(EXCEPTION_ARGUMENTS);
     gathers.findRow({gid, flat: 1}, (err, rs) => {
         if(err || rs === null) return cb(err || EXCEPTION_NONE_RESULT);
         cb(null, Object.assign({}, rs));
@@ -42,6 +45,7 @@ function getInvalidityGatherInfoByGid(gid, cb = ()=> {}) {
  * @param gid 集合id
  */
 function updateGatherInfo(data = {}, gid = 0, cb = () => {}) {
+    if(isEmpty(data) || !gid || gid < 1) return cb(EXCEPTION_ARGUMENTS);
     gathers.update(data, {gid}, (err, rs)=> {
         if(err || rs < 1) return cb(err || EXCEPTION_UNABLE_OPERATE);
         cb(null , rs);
@@ -61,17 +65,14 @@ function createGather(gatherInfo = {}, cb = () => {}) {
     });
 }
 
-testAsyncFunc("createGather", createGather, {uid : 1,})
-
 /**
  * 删除集合
  * @param gid 被移除的集合id
  */
 function removeGather(gid, cb = () => {}) {
-    waterfall([
+    series([
         apply(getValidityGatherInfoByGid, gid),
         apply(updateGatherInfo, {flag : 1}, gid),
-
     ], (err, rs) => {
         if(err) return cb(err);
         cb(null, rs);
@@ -80,19 +81,22 @@ function removeGather(gid, cb = () => {}) {
 
 /**
  * 还原集合
+ * @param gid
  */
 function restoreGather(gid, cb = () => {}) {
-    auto({
-        gatherInfo : apply(getInvalidityGatherInfoByGid, gid),
-    }, (err, rs) => {
-
+    series([
+        apply(series, [
+            apply(getInvalidityGatherInfoByGid, gid),
+            apply(updateGatherInfo, {flag : 0}, gid)
+        ]),
+        //还原关联
+        apply(restoreGatherOfRemovedReloations, gid)
+    ], (err, rs) => {
+        if(err) return cb(err);
+        cb(null, rs);
     });
 
 }
-
-testAsyncFunc("removeGather", removeGather, 1);
-//testAsyncFunc("restoreGather", restoreGather, 1);
-
 
 module.exports = {
     getValidityGatherInfoByGid,
