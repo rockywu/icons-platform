@@ -10,7 +10,8 @@ const {
     PERMISSION_GATHER_MODIFY,
     PERMISSION_GATHER_AUDIT,
     PERMISSION_GATHER_PUBLISH,
-    PERMISSION_GATHER_ADMIN
+    PERMISSION_GATHER_ADMIN,
+    EXCEPTION_UNABLE_OPERATE
 } = require("../constants");
 const {forEach} = require("lodash");
 

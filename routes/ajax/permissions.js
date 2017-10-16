@@ -20,7 +20,7 @@ const {
 } = require("../../core/bll/permissions");
 
 const {
-    getGatherInfoByGid
+    getValidityGatherInfoByGid
 } = require("../../core/bll/gathers");
 
 const {
@@ -33,6 +33,9 @@ const {
 
 /*
  * 平台超级用户添加/删除集合管理员权限
+ * @param gid
+ * @param action
+ * @param uid
  */
 router.use("/user/admin", (req, res, next) => {
     let params = res.getParams("gid", "action", "uid");
@@ -46,6 +49,9 @@ router.use("/user/admin", (req, res, next) => {
 
 /**
  * 集合管理员权限用户操作
+ * @param gid
+ * @param action
+ * @param uid
  */
 router.use(/\/user\/(upload|modify|audit|publish)/, (req, res, next) => {
     let locals = res.locals;
@@ -65,6 +71,9 @@ router.use(/\/user\/(upload|modify|audit|publish)/, (req, res, next) => {
 
 /**
  * 添加/移除集合用户的权限
+ * @param gid
+ * @param action
+ * @param uid
  */
 router.use(/\/user\/(upload|modify|audit|publish|admin)/, (req, res) => {
     let locals = res.locals;
@@ -78,7 +87,7 @@ router.use(/\/user\/(upload|modify|audit|publish|admin)/, (req, res) => {
         "admin" : PERMISSION_GATHER_ADMIN
     }
     auto({
-        gatherInfo : apply(getGatherInfoByGid, params.gid),
+        gatherInfo : apply(getValidityGatherInfoByGid, params.gid),
         userInfo : apply(getUserInfoByUid, params.uid),
         operateInfo : ["gatherInfo", "userInfo", function(rs, cb) {
             let callback = null;
