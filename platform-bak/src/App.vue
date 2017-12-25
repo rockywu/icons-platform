@@ -5,7 +5,6 @@
         <el-footer></el-footer>
     </div>
 </template>
-
 <script>
 
 import Header from "@/components/Header";

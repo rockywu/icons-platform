@@ -16,7 +16,8 @@ const {
 const {
     addUserPermission,
     deleteUserPermission,
-    checkUserForHasAdminPermission
+    checkUserForHasAdminPermission,
+    checkUserForHasSystemAdminPermission
 } = require("../../core/bll/permissions");
 
 const {
@@ -40,7 +41,7 @@ const {
 router.use("/user/admin", (req, res, next) => {
     let params = res.getParams("gid", "action", "uid");
     let userInfo = res.locals.userInfo;
-    if(parseInt(userInfo.authority, 10) === 1) {
+    if(checkUserForHasSystemAdminPermission(userInfo)) {
         return next();
     } else {
         return res.outJson({}, "无权限访问", AJAX_STATUS.STATUS_REJECT);

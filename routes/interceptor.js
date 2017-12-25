@@ -68,7 +68,6 @@ module.exports = (req, res, next) => {
         res.cookie(COOKIE_USER_INFO, secretUserInfo, {
             maxAge : 1000 * 60 * 60 * 6
         });
-        return next();
     }
     let uid = userInfo.uid;
     /**

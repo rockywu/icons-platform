@@ -36,18 +36,34 @@ function restoreGatherOfRemovedReloations(gid = 0, cb = () => {}) {
 }
 
 /**
+ * 删除集合关联关系
+ */
+function removeGatherOfValidityReloations(gid = 0, cb = () => {}) {
+    updateReloations({ flag : 3 }, {gid, flag : 1 }, (err ,rs) => {
+        if(err == EXCEPTION_UNABLE_OPERATE) return cb(null, 0);
+        if(err) return cb(err);
+        cb(null ,rs);
+    });
+}
+
+/**
  * 创建图标集合关联关系
  * @param data 数据
  */
-function createGatherOfBasicsRelations(data, cb = () => {}) {
-    let {bid = 0, gid = 0, name ="", unicode = "", classname = ""} = data;
-    bid = filter(!isArray(bid) ? [bid] : bid, (v) => {
-        return parseInt(v, 10) > 0;
-    });
+function createGatherOfBasicsRelations(data = [], cb = () => {}) {
+    //let {bid = 0, gid = 0, name ="", unicode = "", classname = ""} = data;
+    //bid = filter(!isArray(bid) ? [bid] : bid, (v) => {
+    //    return parseInt(v, 10) > 0;
+    //});
+    //cb(bid)
+    //console.log(bid)
 }
+
+//testAsyncFunc("createGatherOfBasicsRelations", createGatherOfBasicsRelations, {bid : 9})
 
 
 module.exports = {
     updateReloations,
-    restoreGatherOfRemovedReloations
+    restoreGatherOfRemovedReloations,
+    removeGatherOfValidityReloations
 };

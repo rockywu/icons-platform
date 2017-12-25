@@ -11,7 +11,24 @@ const {
 } = require("../constants");
 const {auto,series, apply} = require("async");
 const {forEach, isEmpty} = require("lodash");
-const {restoreGatherOfRemovedReloations} = require("./relations");
+const {
+    restoreGatherOfRemovedReloations,
+    removeGatherOfValidityReloations,
+} = require("./relations");
+
+/**
+ * 获取集合信息
+ * @param gid
+ */
+function getGatherInfoByGid(gid, cb = () => {}) {
+    if (!gid || gid < 1) return cb(EXCEPTION_ARGUMENTS);
+    gathers.findRow({gid}, (err, rs) => {
+        if (err || rs === null) return cb(err || EXCEPTION_NONE_RESULT);
+        cb(null, Object.assign({}, rs));
+        rs = null;
+    });
+}
+
 
 /**
  * 获取有效的集合信息
@@ -71,8 +88,12 @@ function createGather(gatherInfo = {}, cb = () => {}) {
  */
 function removeGather(gid, cb = () => {}) {
     series([
-        apply(getValidityGatherInfoByGid, gid),
-        apply(updateGatherInfo, {flag : 1}, gid),
+        apply(series, [
+            apply(getValidityGatherInfoByGid, gid),
+            apply(updateGatherInfo, {flag : 1}, gid),
+        ]),
+        //删除关联关系
+        apply(removeGatherOfValidityReloations, gid)
     ], (err, rs) => {
         if(err) return cb(err);
         cb(null, rs);
@@ -99,6 +120,7 @@ function restoreGather(gid, cb = () => {}) {
 }
 
 module.exports = {
+    getGatherInfoByGid,
     getValidityGatherInfoByGid,
     getInvalidityGatherInfoByGid,
     createGather,
